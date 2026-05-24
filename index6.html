@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>썸네일 & 옵션 - 호버 잘림 방지 완벽 보정 버전</title>
+<style>
+    /* 사용할 폰트 세트 통합 불러오기 (Noto Sans KR, Plus Jakarta Sans) */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+
+    /* 💡 화이트 오로라 디자인 시스템 변수 세팅 */
+    :root { 
+        --point: #85CCA1;       /* 포인트 연두색 */
+        --bg: #FFFFFF;          /* 화이트 배경 */
+        --border: #E2E8F0;      /* 연한 테두리 선 */
+        --text: #4A6B53;        /* 진한 그린 텍스트 */
+        --gap: 15px;            /* 아이템 간격 공통 */
+    }
+
+    .dw-root * { box-sizing: border-box; margin: 0; padding: 0; }
+    .dw-root {
+        font-family: 'Noto Sans KR', sans-serif;
+        background-color: var(--bg);
+        
+        /* 화이트 오로라 그라데이션 배경 */
+        background-image: 
+            radial-gradient(circle at 10% 15%, rgba(133, 204, 161, 0.15) 0%, transparent 40%),
+            radial-gradient(circle at 90% 85%, rgba(133, 204, 161, 0.12) 0%, transparent 45%);
+        background-attachment: fixed;
+        
+        color: var(--text);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-bottom: 60px;
+        line-height: 1.7;
+    }
+
+    /* 🏛 패키지 카드들과 일치시킨 중앙 정렬형 섹션 라벨 박스 */
+    .dw-section-lbl-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 60px 0 30px; 
+    }
+    .dw-section-lbl {
+        display: inline-block;
+        padding: 8px 24px;
+        background: #FFFFFF;
+        border: 1px solid var(--border);
+        border-radius: 4px; 
+        
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 11px; 
+        color: var(--text); 
+        letter-spacing: 0.35em;
+        font-weight: 700;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+        line-height: 1.5;
+    }
+
+    /* ═══ 슬라이더 공통 및 아우터 정렬 ═══ */
+    .dw-slider-section { position: relative; width: 100%; text-align: center; }
+    
+    /* 💡 [핵심 보정] 좌우 패딩을 15px씩 주어 확대 시 잘림을 완벽 방지 */
+    .dw-slider-outer { 
+        overflow: hidden; 
+        margin: 0 auto;
+        padding: 25px 15px; 
+    }
+    
+    /* 💡 패딩(30px)이 늘어난 만큼 바깥 가로폭을 넓혀 내부 정렬 크기 유지 */
+    .design-outer { width: 1110px; }
+    .addon-outer { width: 1080px; }
+
+    .dw-slider-track { 
+        display: flex; 
+        gap: var(--gap); 
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+        width: max-content; 
+    }
+    
+    /* 🎨 디자인 아이템 (썸네일) 카드 */
+    .dw-design-item { 
+        width: 350px; 
+        height: 210px; 
+        background: #FFFFFF; 
+        border: 1px solid var(--border); 
+        border-radius: 20px; 
+        overflow: hidden; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        position: relative;
+        z-index: 1;
+        
+        /* 쫀득한 리바운드 탄성 가속도 적용 */
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, z-index 0s;
+        cursor: pointer;
+    }
+    /* 💡 호버 시 젤리처럼 통~ 커지며 부드럽게 상승 (z-index로 겹침 레이어 최상단 설정) */
+    .dw-design-item:hover {
+        z-index: 10;
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 15px 35px rgba(133, 204, 161, 0.2);
+    }
+    
+    /* 이미지 및 프리뷰 공통 */
+    .dw-design-item img, .dw-item-preview img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        display: block; 
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .dw-design-item:hover img {
+        transform: scale(1.04);
+    }
+    
+    /* 🎨 애드온 옵션 상품 카드 */
+    .dw-addon-item { 
+        width: 340px; 
+        background: #FFFFFF; 
+        border: 1px solid var(--border); 
+        border-radius: 20px; 
+        overflow: hidden; 
+        text-align: left; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        position: relative;
+        z-index: 1;
+        
+        /* 통통 튀는 푸딩 같은 가속도 곡선 적용 */
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease, box-shadow 0.4s ease, z-index 0s;
+    }
+    /* 💡 호버 시 탱글하게 다가오는 바운스 효과 (z-index 추가) */
+    .dw-addon-item:hover {
+        z-index: 10;
+        transform: translateY(-8px) scale(1.03);
+        border-color: var(--point);
+        box-shadow: 0 15px 35px rgba(133, 204, 161, 0.18);
+    }
+
+    .dw-item-preview { width: 100%; aspect-ratio: 16/9; background: #eaeaea; border-bottom: 1px solid var(--border); overflow: hidden; }
+    
+    /* 카드 내부 타이포그래피 */
+    .dw-item-info { padding: 18px 20px; }
+    .dw-item-title { font-size: 16px; font-weight: 700; color: #2D3748; margin-bottom: 2px; letter-spacing: -0.5px; }
+    .dw-item-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; color: var(--point); margin-bottom: 6px; }
+    .dw-item-desc { font-size: 12px; color: #718096; line-height: 1.5; }
+
+    /* 🎛 컨트롤러 (좌우 화살표 버튼) */
+    .dw-controls { display: flex; justify-content: center; gap: 12px; margin-top: 15px; }
+    .dw-arrow-btn {
+        width: 38px; height: 38px; background: #FFFFFF; border-radius: 50%; border: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; 
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, border-color 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .dw-arrow-btn:hover { background: var(--point); border-color: var(--point); transform: scale(1.15); }
+    .dw-arrow-btn:hover .dw-arrow-svg { stroke: #FFFFFF; }
+
+    /* 동글동글한 느낌을 주는 두툼한 라운드 SVG 화살표 스타일 */
+    .dw-arrow-svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--text);
+        stroke-width: 3px; 
+        fill: none;
+        transition: stroke 0.2s ease;
+        display: block;
+    }
+</style>
+</head>
+<body>
+<div class="dw-root">
+    
+    <!-- 1. 디자인 포트폴리오 섹션 -->
+    <div class="dw-section-lbl-wrap">
+        <div class="dw-section-lbl">PORTFOLIO · DESIGN</div>
+    </div>
+    
+    <div class="dw-slider-section">
+        <div class="dw-slider-outer design-outer">
+            <div class="dw-slider-track" id="design-track">
+                <div class="dw-design-item"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/t1.png" alt=""></div>
+                <div class="dw-design-item"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/t2.png" alt=""></div>
+                <div class="dw-design-item"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/t3.png" alt=""></div>
+                <div class="dw-design-item"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/t4.png" alt=""></div>
+                <div class="dw-design-item"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/t5.png" alt=""></div>
+                <div class="dw-design-item"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/t6.png" alt=""></div>
+            </div>
+        </div>
+        <div class="dw-controls">
+            <button class="dw-arrow-btn" onclick="moveSlide('design-track', -1)">
+                <svg class="dw-arrow-svg" viewBox="0 0 24 24">
+                    <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="dw-arrow-btn" onclick="moveSlide('design-track', 1)">
+                <svg class="dw-arrow-svg" viewBox="0 0 24 24">
+                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. 애드온 옵션 섹션 -->
+    <div class="dw-section-lbl-wrap">
+        <div class="dw-section-lbl">ADD-ON OPTIONS</div>
+    </div>
+    
+    <div class="dw-slider-section">
+        <div class="dw-slider-outer addon-outer">
+            <div class="dw-slider-track" id="addon-track">
+                <div class="dw-addon-item">
+                    <div class="dw-item-preview"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/o2d.png" alt=""></div>
+                    <div class="dw-item-info"><div class="dw-item-title">배경 디자인 (2D)</div><div class="dw-item-price">25,000 KRW</div><div class="dw-item-desc">2D이미지/이펙트/도형패턴 등의 배경을 작업합니다.</div></div>
+                </div>
+                <div class="dw-addon-item">
+                    <div class="dw-item-preview"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/o3d.png" alt=""></div>
+                    <div class="dw-item-info"><div class="dw-item-title">배경 디자인 (3D)</div><div class="dw-item-price">50,000~100,000 KRW</div><div class="dw-item-desc">Fake 3D/3D 오브젝트 소스를 활용한 입체적이고<br/>현실적인 하이퀄리티 배경을 작업합니다.</div></div>
+                </div>
+                <div class="dw-addon-item">
+                    <div class="dw-item-preview"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/olive.png" alt=""></div>
+                    <div class="dw-item-info"><div class="dw-item-title">Live 2D 애니메이션</div><div class="dw-item-price">40,000~80,000 KRW</div><div class="dw-item-desc">캐릭터의 움직임을 위한 Live2D 애니메이션을<br/>작업합니다.<br/>※레이어가 분리된 PSD/PNG 파일만 작업 가능합니다.</div></div>
+                </div>
+                <div class="dw-addon-item">
+                    <div class="dw-item-preview"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/othumb.png" alt=""></div>
+                    <div class="dw-item-info"><div class="dw-item-title">디자인(썸네일)SET</div><div class="dw-item-price">17,000 KRW</div><div class="dw-item-desc">로고+썸네일+크레딧 패키지입니다.</div></div>
+                </div>
+                <div class="dw-addon-item">
+                    <div class="dw-item-preview"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/othumb.png" alt=""></div>
+                    <div class="dw-item-info"><div class="dw-item-title">빠른 마감</div><div class="dw-item-price">기한에 따라 협의</div><div class="dw-item-desc">납기일보다 빠르게 완성된 영상을 작업합니다.</div></div>
+                </div>
+                <div class="dw-addon-item">
+                    <div class="dw-item-preview"><img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/othumb.png" alt=""></div>
+                    <div class="dw-item-info"><div class="dw-item-title">SNS/Shorts 폼 추가</div><div class="dw-item-price">5,000 KRW</div><div class="dw-item-desc">SNS/Shorts 업로드용 30초 내외 영상을 출력합니다.</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="dw-controls">
+            <button class="dw-arrow-btn" onclick="moveSlide('addon-track', -1)">
+                <svg class="dw-arrow-svg" viewBox="0 0 24 24">
+                    <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="dw-arrow-btn" onclick="moveSlide('addon-track', 1)">
+                <svg class="dw-arrow-svg" viewBox="0 0 24 24">
+                    <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const sliderIdx = { 'design-track': 0, 'addon-track': 0 };
+
+    window.moveSlide = function(id, dir) {
+        const track = document.getElementById(id);
+        const gap = 15;
+        const moveCount = 3;
+        const maxIdx = 1; 
+
+        let itemWidth = (id === 'design-track') ? 350 : 340;
+
+        sliderIdx[id] += dir;
+        if (sliderIdx[id] < 0) sliderIdx[id] = 0;
+        if (sliderIdx[id] > maxIdx) sliderIdx[id] = maxIdx;
+
+        const moveStep = (itemWidth + gap) * moveCount;
+        const totalMove = sliderIdx[id] * moveStep;
+        
+        track.style.transform = `translateX(-${totalMove}px)`;
+    };
+})();
+</script>
+</body>
+</html>

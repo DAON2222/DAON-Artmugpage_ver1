@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스탠다드 - Index 4 스타일 변환 (3*3 배열)</title>
+<style>
+    /* 사용할 폰트 세트 통합 불러오기 (Dongle, Noto Sans KR, Plus Jakarta Sans) */
+    @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&family=Noto+Sans+KR:wght@400;700;900&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+
+    /* 화이트 오로라 디자인 시스템 변수 세팅 */
+    :root { 
+        --point: #85CCA1;       /* 포인트 연두색 */
+        --bg: #FFFFFF;          /* 화이트 배경 */
+        --card: #F8F9FA;        /* 카드 내부 배경 */
+        --border: #E2E8F0;      /* 연한 테두리 선 */
+        --text: #4A6B53;        /* 진한 그린 텍스트 */
+    }
+
+    .daon-root * { box-sizing: border-box; margin: 0; padding: 0; }
+    .daon-root {
+        font-family: 'Dongle', sans-serif;
+        background-color: var(--bg);
+        
+        /* 화이트 오로라 그라데이션 배경 */
+        background-image: 
+            radial-gradient(circle at 10% 15%, rgba(133, 204, 161, 0.15) 0%, transparent 40%),
+            radial-gradient(circle at 90% 85%, rgba(133, 204, 161, 0.12) 0%, transparent 45%);
+        background-attachment: fixed;
+        
+        color: var(--text);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 0;
+        
+        font-size: 24px; 
+        line-height: 1.2;
+    }
+
+    /* 상단 섹션 라벨 박스 영역 */
+    .daon-section-lbl-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px; 
+    }
+    .daon-section-lbl {
+        display: inline-block;
+        padding: 8px 24px;
+        background: #FFFFFF;
+        border: 1px solid var(--border);
+        border-radius: 4px; 
+        
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 11px; 
+        color: var(--text); 
+        letter-spacing: 0.35em;
+        font-weight: 700;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+        line-height: 1.5;
+    }
+
+    /* 패키지 카드 메인 디자인 */
+    .daon-pkg-card { 
+        background: var(--card); 
+        border: 1.5px solid var(--border); 
+        border-radius: 35px; 
+        overflow: hidden; 
+        margin: 0 40px; 
+        box-shadow: 0 10px 30px rgba(178, 213, 184, 0.05); 
+    }
+    
+    /* 상단 헤더 영역 구조 잡기 */
+    .daon-pkg-top { 
+        padding: 30px 40px; 
+        border-bottom: 1.5px solid var(--border); 
+        display: flex; 
+        flex-direction: column;
+        align-items: center; 
+        text-align: center;
+        gap: 8px;
+    }
+    
+    /* 타이틀 중앙 정렬용 3단 분할 레이아웃 */
+    .daon-pkg-main-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        width: 100%;
+    }
+    .daon-pkg-main-row::before {
+        content: '';
+        flex: 1;
+        display: block;
+    }
+    .daon-pkg-title-area {
+        flex: 0 0 auto;
+        text-align: center;
+    }
+
+    /* 타이틀 스타일링 */
+    .daon-pkg-title-area h3 { 
+        font-size: 80px; 
+        font-weight: 700; 
+        color: var(--point); 
+        letter-spacing: -1px; 
+        text-shadow: 0px 1px 0px rgba(0,0,0,0.05); 
+        line-height: 1; 
+    }
+    
+    /* 가격 영역 우측 배치 */
+    .daon-pkg-price { 
+        flex: 1;
+        text-align: left;
+        padding-left: 40px; 
+        
+        font-family: 'Dongle', sans-serif; 
+        font-size: 42px; 
+        font-weight: 700; 
+        color: var(--text); 
+        line-height: 1; 
+        white-space: nowrap;
+    }
+    .daon-krw { font-size: 0.65em; margin-left: 6px; color: var(--text); font-weight: 400; }
+    
+    /* 요약 배지 행 정렬 */
+    .daon-pkg-summary-row { 
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: center;
+        gap: 8px;
+        margin: 0;
+    }
+    
+    /* 라운드 알약 배지 스타일 */
+    .daon-summary-pill { 
+        padding: 5px 16px; 
+        background: #F1F5F9; 
+        border: 1.5px solid #E2E8F0; 
+        border-radius: 50px; 
+        color: #718096; 
+        
+        font-family: 'Noto Sans KR', sans-serif; 
+        font-size: 12px; 
+        font-weight: 700; 
+        line-height: 1.5; 
+    }
+    .daon-summary-pill.highlight { background: var(--point); color: #FFFFFF; border-color: var(--point); }
+
+    /* 💡 가로 3열 그리드 유지 */
+    .daon-video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 40px; }
+    .daon-video-grid iframe { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 15px; background: #000; }
+
+    /* 모바일 반응형 처리 */
+    @media (max-width: 768px) {
+        .daon-video-grid { grid-template-columns: 1fr; }
+        .daon-pkg-top { padding: 25px 20px; gap: 8px; }
+        
+        .daon-pkg-main-row { flex-direction: column; align-items: center; gap: 5px; }
+        .daon-pkg-main-row::before { display: none; }
+        .daon-pkg-price { padding-left: 0; text-align: center; font-size: 38px; }
+        .daon-pkg-title-area h3 { font-size: 54px; }
+    }
+</style>
+</head>
+<body>
+<div class="daon-root">
+    
+    <div class="daon-section-lbl-wrap">
+        <div class="daon-section-lbl">PORTFOLIO · SUBTITLE</div>
+    </div>
+
+    <div class="daon-pkg-card">
+        <div class="daon-pkg-top">
+            
+            <div class="daon-pkg-main-row">
+                <div class="daon-pkg-title-area">
+                    <h3>Subtitle</h3>
+                </div>
+                <div class="daon-pkg-price">20,000~<span class="daon-krw">KRW</span></div>
+            </div>
+
+            <div class="daon-pkg-summary-row">
+                <span class="daon-summary-pill highlight">2~3 Days</span>
+                <span class="daon-summary-pill">오타/오류 외 무컨펌</span>
+                <span class="daon-summary-pill">카메라/연출 없음</span>
+                <span class="daon-summary-pill">고정틀작업</span>
+            </div>
+
+        </div>
+        
+        <div class="daon-video-grid">
+            <iframe src="https://www.youtube.com/embed/J1TMWjPzjc8"></iframe>
+            <iframe src="https://www.youtube.com/embed/JD1RENEcRyw"></iframe>
+            <iframe src="https://www.youtube.com/embed/czJKGTYNLes"></iframe>
+        </div>
+    </div>
+</div>
+</body>
+</html>

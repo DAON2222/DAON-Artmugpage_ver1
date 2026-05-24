@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소개 및 안내 - Index 1</title>
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+    /* 폰트 세트 통합 불러오기 */
+    @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&family=Noto+Sans+KR:wght@400;700;900&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+
+    /* ═══ 변수 및 기본 설정 (화이트 오로라 시스템) ═══ */
+    :root { 
+        --point: #85CCA1;       /* 포인트 연두색 */
+        --bg: #FFFFFF;          /* 화이트 배경 */
+        --card: #F8F9FA;        /* 카드 내부 배경 */
+        --border: #E2E8F0;      /* 연한 테두리 선 */
+        --text: #4A6B53;        /* 진한 그린 텍스트 */
+    }
+
+    .daon-root * { box-sizing: border-box; margin: 0; padding: 0; }
+    .daon-root {
+        font-family: 'Dongle', sans-serif;
+        background-color: var(--bg);
+        
+        /* 화이트 오로라 그라데이션 배경 */
+        background-image: 
+            radial-gradient(circle at 10% 15%, rgba(133, 204, 161, 0.15) 0%, transparent 40%),
+            radial-gradient(circle at 90% 85%, rgba(133, 204, 161, 0.12) 0%, transparent 45%);
+        background-attachment: fixed;
+        
+        color: var(--text);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-bottom: 80px;
+        line-height: 1.7;
+        text-align: center;
+    }
+
+    /* ═══ 1. 상단 마감 안내 및 슬라이더 ═══ */
+    .daon-hero { padding: 80px 28px 40px; text-align: center; }
+    
+    .daon-deadline-status {
+        display: inline-flex; align-items: center; gap: 12px;
+        padding: 10px 30px; 
+        background: #FFF5F5; 
+        border: 1.5px solid #FFE3E3;
+        border-radius: 100px; 
+        margin-bottom: 40px;
+        box-shadow: 0 4px 10px rgba(255, 107, 107, 0.05);
+    }
+    .daon-red-dot {
+        width: 8px; height: 8px; background: #FF6B6B; border-radius: 50%;
+        box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+        animation: daon-slow-blink 2.5s infinite ease-in-out;
+    }
+    @keyframes daon-slow-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .daon-deadline-text { 
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 14px; 
+        font-weight: 700; 
+        color: #FF6B6B; 
+        letter-spacing: -0.02em; 
+    }
+
+    .daon-slider-wrap {
+        width: 100%; max-width: 1100px; margin: 0 auto;
+        border: 1.5px solid var(--border); 
+        border-radius: 35px; 
+        overflow: hidden; 
+        background: var(--card);
+        height: 500px; 
+        position: relative;
+        box-shadow: 0 10px 30px rgba(178, 213, 184, 0.05);
+    }
+
+    .swiper { width: 100%; height: 100%; }
+    .swiper-slide img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .swiper-button-next::after, .swiper-button-prev::after { 
+        font-size: 24px !important; 
+        font-weight: bold;
+    }
+    .swiper-button-next, .swiper-button-prev { 
+        color: var(--point) !important; 
+        width: 40px; 
+        height: 40px;
+    }
+    .swiper-pagination-bullet-active { background: var(--point) !important; }
+
+    /* ═══ 2. 소개글 영역 ═══ */
+    .daon-section-lbl-wrap {
+        display: flex; justify-content: center; margin: 80px 0 24px; 
+    }
+    .daon-section-lbl {
+        display: inline-block; padding: 8px 24px; background: #FFFFFF;
+        border: 1px solid var(--border); border-radius: 4px; 
+        font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; 
+        color: var(--text); letter-spacing: 0.35em; font-weight: 700;
+        text-align: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01); line-height: 1.5;
+    }
+
+    .daon-about-container { padding: 0 40px; max-width: 900px; margin: 0 auto; }
+    .daon-about-card {
+        background: var(--card);
+        border: 1.5px solid var(--border);
+        border-radius: 35px;
+        padding: 60px 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(178, 213, 184, 0.05);
+    }
+    .daon-about-title {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--point);
+        margin-bottom: 24px;
+    }
+    .daon-about-desc {
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 15px;
+        color: #5a7a64;
+        line-height: 1.9;
+        word-break: keep-all;
+    }
+
+    /* ═══ 푸터 영역 간소화 ═══ */
+    .daon-footer { 
+        padding-top: 80px;
+    }
+    
+    @media (max-width: 768px) {
+        .daon-slider-wrap { height: 300px; border-radius: 20px; }
+        .daon-about-container { padding: 0 20px; }
+        .daon-about-card { padding: 40px 20px; border-radius: 25px; }
+        .daon-hero { padding: 40px 20px 20px; }
+    }
+</style>
+</head>
+<body>
+<div class="daon-root">
+    
+    <div class="daon-hero">
+        <div class="daon-deadline-status">
+            <div class="daon-red-dot"></div>
+            <span class="daon-deadline-text">~ 5월 30일 일정 마감 · 신청양식 + 자료 필수</span>
+        </div>
+
+        <div class="daon-slider-wrap">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/top1.png" alt="포트폴리오 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/top2.png" alt="포트폴리오 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://studiodwofficial-a11y.github.io/StudioDW-Artmugpage_ver1/top3.png" alt="포트폴리오 3">
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="daon-section-lbl-wrap">
+        <div class="daon-section-lbl">INTRODUCTION</div>
+    </div>
+    <div class="daon-about-container">
+        <div class="daon-about-card">
+            <div class="daon-about-title">다온 디자인 스튜디오</div>
+            <div class="daon-about-desc">
+                안녕하세요. 당신의 브랜드에 따뜻한 빛을 더하는 다온 디자인입니다.<br><br>
+                우리는 시각적인 아름다움을 넘어, 담고자 하는 메시지와 가치를<br>가장 돋보이게 만드는 최적의 디자인 솔루션을 제안합니다.<br>
+                개인 방송용 에셋부터 기업 프로모션 영상까지, 수많은 프로젝트를 통해 쌓아온<br>노하우로 당신의 상상을 현실로 만들어 드립니다.<br><br>
+                다온과 함께 새로운 이야기를 시작해 보세요.
+            </div>
+        </div>
+    </div>
+
+    <div class="daon-footer"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        loop: true,
+        speed: 800,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>
+</body>
+</html>
